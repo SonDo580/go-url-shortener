@@ -28,10 +28,25 @@ func InitializeStore() *StorageService {
 
 	pong, err := redisClient.Ping(ctx).Result()
 	if err != nil {
-		panic(fmt.Sprintf("Error init Redis: %v", err))
+		panic(fmt.Sprintf("Error init Redis: %v\n", err))
 	}
 
 	fmt.Printf("Redis started successfully: pong message = {%s}", pong)
 	storeService.redisClient = redisClient
 	return storeService
+}
+
+func SaveUrlMapping(shortUrl string, originalUrl string, userId string) {
+	err := storeService.redisClient.Set(ctx, shortUrl, originalUrl, CacheDuration).Err()
+	if err != nil {
+		panic(fmt.Sprintf("Failed saving key url | Error: %v - shortUrl: %s - originalUrl: %s\n", err, shortUrl, originalUrl))
+	}
+}
+
+func RetrieveInitialUrl(shortUrl string) string {
+	result, err := storeService.redisClient.Get(ctx, shortUrl).Result()
+	if err != nil {
+		panic(fmt.Sprintf("Failed retrieving initial url | Error: %v - shortUrl: %s\n", err, shortUrl))
+	}
+	return result
 }

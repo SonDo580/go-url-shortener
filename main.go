@@ -16,6 +16,6 @@ func main() {
 
 	err := r.Run(":9808")
 	if err != nil {
-		panic(fmt.Sprintf("Failed to start server - Error: %v", err))
+		panic(fmt.Sprintf("Failed to start server - Error: %v\n", err))
 	}
 }
