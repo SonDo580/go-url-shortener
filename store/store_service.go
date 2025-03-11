@@ -21,7 +21,7 @@ const CacheDuration = 6 * time.Hour
 
 func InitializeStore() *StorageService {
 	redisClient := redis.NewClient(&redis.Options{
-		Addr:     "redis:6379",
+		Addr:     "localhost:6379",
 		Password: "",
 		DB:       0,
 	})
@@ -36,17 +36,17 @@ func InitializeStore() *StorageService {
 	return storeService
 }
 
-func SaveUrlMapping(shortUrl string, originalUrl string, userId string) {
-	err := storeService.redisClient.Set(ctx, shortUrl, originalUrl, CacheDuration).Err()
+func SaveURLMapping(shortURL string, originalURL string, userID string) {
+	err := storeService.redisClient.Set(ctx, shortURL, originalURL, CacheDuration).Err()
 	if err != nil {
-		panic(fmt.Sprintf("Failed saving key url | Error: %v - shortUrl: %s - originalUrl: %s\n", err, shortUrl, originalUrl))
+		panic(fmt.Sprintf("Failed saving key URL | Error: %v - shortURL: %s - originalURL: %s\n", err, shortURL, originalURL))
 	}
 }
 
-func RetrieveInitialUrl(shortUrl string) string {
-	result, err := storeService.redisClient.Get(ctx, shortUrl).Result()
+func RetrieveOriginalURL(shortURL string) string {
+	result, err := storeService.redisClient.Get(ctx, shortURL).Result()
 	if err != nil {
-		panic(fmt.Sprintf("Failed retrieving initial url | Error: %v - shortUrl: %s\n", err, shortUrl))
+		panic(fmt.Sprintf("Failed retrieving original URL | Error: %v - shortURL: %s\n", err, shortURL))
 	}
 	return result
 }
