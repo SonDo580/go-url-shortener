@@ -8,18 +8,18 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-type StorageService struct {
+type StoreService struct {
 	redisClient *redis.Client
 }
 
 var (
-	storeService = &StorageService{}
+	storeService = &StoreService{}
 	ctx          = context.Background()
 )
 
 const CacheDuration = 6 * time.Hour
 
-func InitializeStore() *StorageService {
+func InitializeStore() *StoreService {
 	redisClient := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "",
